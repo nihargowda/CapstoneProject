@@ -1,0 +1,55 @@
+package com.example.demo.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.Products;
+import com.example.demo.repository.ProductRepo;
+import com.example.demo.service.ProductService;
+
+@RestController
+public class ProductController {
+	
+	@Autowired
+	private ProductService pService;
+	 
+	@Autowired
+	private  ProductRepo  pRepo;
+		
+	
+	
+	@GetMapping("/products")
+	@CrossOrigin(origins ="http://localhost:4200")
+	public List<Products> listproducts(){
+		return pService.listAll();
+	}
+
+	@GetMapping("/products/{id}")
+	@CrossOrigin(origins ="http://localhost:4200")
+	public Optional<Products> getById(@PathVariable int id) {
+		return pService.getproductByid(id);
+	}
+	
+	@PutMapping("/products{id}")
+	@CrossOrigin(origins ="http://localhost:4200")
+	public ResponseEntity<Products> updateProduct(@PathVariable(value = "id") Long id,
+			@Valid @RequestBody Products productDetails)  {
+		Employee employee = employeeRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
+
+		employee.setEmailId(employeeDetails.getEmailId());
+		employee.setLastName(employeeDetails.getLastName());
+		employee.setFirstName(employeeDetails.getFirstName());
+		final Employee updatedEmployee = employeeRepository.save(employee);
+		return ResponseEntity.ok(updatedEmployee);
+	}
+}
